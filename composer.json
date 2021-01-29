@@ -17,7 +17,7 @@
         "ext-xmlwriter": "*",
         "ext-curl": "*"
     },
-    "minimum-stability": "0.0.1",
+    "minimum-stability": "beta",
     "autoload": {
         "psr-4": {
             "TCGunel\\Netgsm\\": "src/"
