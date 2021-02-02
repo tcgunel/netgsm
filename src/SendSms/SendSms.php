@@ -45,7 +45,7 @@ class SendSms extends Params implements NetgsmInterface
     protected function prepare(): SendSms
     {
         $this
-//            ->applyConfigParams($this->work_type)
+            ->applyConfigParams($this->work_type)
             ->validateParams()
             ->formatParamsByService($this->service_type)
             ->setValuesToSend()

@@ -124,7 +124,7 @@ trait ParamsTrait
 
         if (!empty($errors)) {
 
-            $message = sprintf('Required fields are empty %s.', join(', ', array_keys($errors)));
+            $message = sprintf('Required fields for Netgsm are empty %s.', join(', ', array_keys($errors)));
 
             throw new \Exception($message, 422);
 

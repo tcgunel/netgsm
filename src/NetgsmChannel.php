@@ -2,25 +2,32 @@
 
 namespace TCGunel\Netgsm;
 
-
-use Illuminate\Bus\Queueable;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\Notification;
+use TCGunel\Netgsm\SendSms\SendSms;
 
 class NetgsmChannel
 {
-    use Queueable;
-
     /**
      * Send the given notification.
      *
-     * @param  mixed  $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
-     * @return void
+     * @param mixed $notifiable
+     * @param Notification $notification
+     * @return string|SendSms
+     * @throws RequestException
      */
-    public function sendSms($notifiable, Notification $notification)
+    public function send($notifiable, Notification $notification)
     {
-        $message = $notification->toVoice($notifiable);
+        $netgsm = $notification->toNetgsm($notifiable);
 
-        // Send notification to the $notifiable instance...
+        if ($netgsm instanceof SendSms) {
+
+            $netgsm->send();
+
+            return $netgsm;
+
+        }
+
+        return '';
     }
 }
