@@ -2,10 +2,10 @@
 
 namespace TCGunel\Netgsm\SendSms;
 
-use TCGunel\Netgsm\Interfaces\NetgsmInterface;
 use TCGunel\Netgsm\Traits\NetgsmTrait;
+use TCGunel\Netgsm\WorkTypes;
 
-class SendSms extends Params implements NetgsmInterface
+class SendSms extends Params
 {
     use NetgsmTrait;
 
@@ -21,10 +21,10 @@ class SendSms extends Params implements NetgsmInterface
     {
         parent::__construct();
 
-        $this->setServiceType(config("netgsm.{$this->work_type}.service") ?? 'xml');
+        $this->setServiceType(config(sprintf("netgsm.%s.service", WorkTypes::SEND_SMS)) ?? 'xml');
 
         $this
-            ->setWorkType('send_sms')
+            ->setWorkType(WorkTypes::SEND_SMS)
             ->setHttpEndpoint('https://api.netgsm.com.tr/sms/send/get/')
             ->setSoapEndpoint('http://soap.netgsm.com.tr:8080/Sms_webservis/SMS?wsdl')
             ->setXmlEndpoint('https://api.netgsm.com.tr/sms/send/xml');
@@ -108,5 +108,46 @@ class SendSms extends Params implements NetgsmInterface
         }
 
         return $xml_array;
+    }
+
+    /**
+     * @param string $service
+     * @param string|string[] $messages
+     * @param null $encoding
+     * @return int|int[]
+     */
+    public function calculateMessageLength(string $service, $messages, $encoding = null)
+    {
+        if (!is_array($messages)) {
+
+            $messages = [$messages];
+
+        }
+
+        foreach ($messages as $k => $message) {
+
+            if ($encoding === null) {
+
+                $encoding = config("netgsm.$service.params.encoding");
+
+            }
+
+            if ($encoding) {
+
+                // These characters counts as 2 each.
+                // Refer https://www.netgsm.com.tr/dokuman/#karakter-hesaplama
+                preg_match_all('/[çğışĞİŞ]/u', $message, $matches);
+
+            }
+
+            $real_message_length = mb_strlen($message);
+
+            $non_latin_length_addition = isset($matches) ? count($matches[0]) : 0;
+
+            $messages[$k] = $real_message_length + $non_latin_length_addition;
+
+        }
+
+        return count($messages) === 1 ? $messages[0] : $messages;
     }
 }

@@ -2,7 +2,9 @@
 
 namespace TCGunel\Netgsm\Traits;
 
-use TCGunel\Netgsm\SendSms\Params;
+use TCGunel\Netgsm\SendSms\Params as SendSmsParams;
+use TCGunel\Netgsm\CreditQuery\Params as CreditQueryParams;
+use TCGunel\Netgsm\PackageCampaignQuery\Params as PackageCampaignQueryParams;
 
 trait ParamsTrait
 {
@@ -11,9 +13,9 @@ trait ParamsTrait
      *
      * @var string[]
      */
-    public $required = [];
+    protected $required = [];
 
-    public $map = [];
+    protected $map = [];
 
     /**
      * Sisteme giriş yaparken kullanılan kullanıcı adıdır. Bu alana abone numarası da yazılabilir (8xxxxxxxxx).
@@ -22,7 +24,7 @@ trait ParamsTrait
      * @var string
      * @required
      */
-    public $username;
+    protected $username;
 
     /**
      * Sisteme giriş yaparken kullanılan şifredir. İstek yapılırken gönderilmesi zorunludur.
@@ -30,13 +32,13 @@ trait ParamsTrait
      * @var string
      * @required
      */
-    public $password;
+    protected $password;
 
     /**
      * @param string[] $required
-     * @return Params|ParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|ParamsTrait
      */
-    public function setRequired(array $required)
+    protected function setRequired(array $required)
     {
         $this->required = $required;
 
@@ -45,9 +47,9 @@ trait ParamsTrait
 
     /**
      * @param array[] $map
-     * @return Params|ParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|ParamsTrait
      */
-    public function setMap(array $map)
+    protected function setMap(array $map)
     {
         $this->map = $map;
 
@@ -56,7 +58,7 @@ trait ParamsTrait
 
     /**
      * @param string $username
-     * @return Params|ParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|ParamsTrait
      */
     public function setUsername(string $username)
     {
@@ -67,7 +69,7 @@ trait ParamsTrait
 
     /**
      * @param string $password
-     * @return Params|ParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|ParamsTrait
      */
     public function setPassword(string $password)
     {
@@ -78,9 +80,9 @@ trait ParamsTrait
 
     /**
      * @param string $work_type
-     * @return Params|ParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|ParamsTrait
      */
-    public function applyConfigParams(string $work_type)
+    protected function applyConfigParams(string $work_type)
     {
         $params = config("netgsm.{$work_type}.params");
 
@@ -89,7 +91,7 @@ trait ParamsTrait
             'password' => config('netgsm.password'),
         ];
 
-        $params = array_merge($params, $common_params);
+        $params = array_merge($params ?? [], $common_params);
 
         foreach ($params as $key => $value) {
 
@@ -105,10 +107,10 @@ trait ParamsTrait
     }
 
     /**
-     * @return Params|ParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|ParamsTrait
      * @throws \Exception
      */
-    public function validateParams()
+    protected function validateParams()
     {
         $errors = [];
 

@@ -2,7 +2,6 @@
 
 namespace TCGunel\Netgsm\SendSms;
 
-use TCGunel\Netgsm\Interfaces\ParamsInterface;
 use TCGunel\Netgsm\Traits\ParamsTrait;
 
 /**
@@ -14,7 +13,7 @@ use TCGunel\Netgsm\Traits\ParamsTrait;
  * @url https://www.netgsm.com.tr/dokuman/#sms-g%C3%B6nderimi
  * @package TCGunel\Netgsm\Sms
  */
-class Params extends FormatParams implements ParamsInterface
+class Params extends FormatParams
 {
     use ParamsTrait;
 

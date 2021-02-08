@@ -2,7 +2,10 @@
 
 namespace TCGunel\Netgsm\Traits;
 
-use TCGunel\Netgsm\SendSms\FormatParams;
+use TCGunel\Netgsm\SendSms\Params as SendSmsParams;
+use TCGunel\Netgsm\CreditQuery\Params as CreditQueryParams;
+use TCGunel\Netgsm\PackageCampaignQuery\Params as PackageCampaignQueryParams;
+use TCGunel\Netgsm\ServiceTypes;
 
 trait FormatParamsTrait
 {
@@ -10,13 +13,13 @@ trait FormatParamsTrait
      * @var string
      * @required
      */
-    public $service_type;
+    protected $service_type;
 
     /**
      * @param string $service_type
-     * @return FormatParams|FormatParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|FormatParamsTrait
      */
-    public function setServiceType(string $service_type): FormatParams
+    protected function setServiceType(string $service_type)
     {
         $this->service_type = $service_type;
 
@@ -25,12 +28,12 @@ trait FormatParamsTrait
 
     /**
      * @param string $password
-     * @return FormatParams|FormatParamsTrait
+     * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|FormatParamsTrait
      */
-    protected function password(string &$password): FormatParams
+    protected function password(string &$password)
     {
         switch ($this->service_type) {
-            case 'http':
+            case ServiceTypes::HTTP:
 
                 $password = urlencode($password);
 

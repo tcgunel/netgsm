@@ -1,7 +1,7 @@
 [![License](https://poser.pugx.org/freshbitsweb/laravel-log-enhancer/license)](https://packagist.org/packages/freshbitsweb/laravel-log-enhancer)
 [![Buy us a tree](https://img.shields.io/badge/Buy%20me%20a%20tree-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://plant.treeware.earth/freshbitsweb/laravel-log-enhancer)
 
-# Laravel Netgsm Entegrasyonu (Laravel 7.x|8.x)
+# Laravel Netgsm Channel Entegrasyonu (Laravel 7.x|8.x)
 Netgsm hizmetlerini laravel ile kolay ve hızlıca kullanmaya başlamak için geliştirilen bir paket. Netgsm
 tarafından sunulan tüm metodları (SOAP Servisi, XML POST ve HTTP GET) destekleyecek şekilde hazırlanmıştır.
 
@@ -22,8 +22,8 @@ geliştirme yapılacaktır.
 
 ### Hesap Apileri Yapılacaklar Listesi
 
-- [ ] Kredi Sorgulama
-- [ ] Paket Kampanya Sorgulama
+- [x] Kredi Sorgulama
+- [x] Paket Kampanya Sorgulama
 
 ## Requirements
 | PHP    | Laravel | Package |
@@ -93,7 +93,7 @@ Sms Gönderim Örnekleri
          
          //->setPassword('*********');  // Opsiyonel. Gönderimi farklı bir hesap ile yapmak için.
     
-    $sms->send();
+    $sms->execute();
 ```
 
 **n:n Gönderim**
@@ -101,18 +101,49 @@ Sms Gönderim Örnekleri
 Bir defada her numaraya kendi mesajını gönderebilmek için kullanılır.
 
 ```
-
 ->setMsg(['Mesaj 1', 'Mesaj 2', 'Mesaj 3']); // Mesaj içerikleri
         
 ->setGsm([5554443322, 4443332211, 3332221100])
+```
 
+Kredi Sorgulama
+====================
+```
+$creditQuery = new CreditQuery();
+
+$creditQuery
+
+    ->setUsername('800800800') // Opsiyonel.
+    
+    ->setPassword('*********'); // Opsiyonel.
+
+
+$creditQuery->execute();
+
+$creditQuery->result; // String olarak TL bakiye barındırır. E.g. 150,77
+```
+
+Paket Sorgulama
+====================
+```
+$packageCampaignQuery = new PackageCampaignQuery();
+
+$packageCampaignQuery
+
+    ->setUsername('800800800') // Opsiyonel.
+
+    ->setPassword('*********'); // Opsiyonel.
+
+$packageCampaignQuery->execute();
+
+$packageCampaignQuery->result; // Hesaba bağlı tüm paket bilgisini array[] olarak barındırır.
 ```
 
 ## Authors
 
 * [**Tolga Can GÜNEL**](https://github.com/tcgunel) - *Altyapı ve proje başlangıcı*
 
-See also the list of [contributors](https://github.com/freshbitsweb/laravel-log-enhancer/graphs/contributors) who participated in this project.
+[comment]: <> (See also the list of [contributors]&#40;https://github.com/freshbitsweb/laravel-log-enhancer/graphs/contributors&#41; who participated in this project.)
 
 ## License
 

@@ -22,7 +22,7 @@ class NetgsmChannel
 
         if ($netgsm instanceof SendSms) {
 
-            $netgsm->send();
+            $netgsm->execute();
 
             return $netgsm;
 

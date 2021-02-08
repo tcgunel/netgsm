@@ -1,12 +1,12 @@
 {
     "name": "tcgunel/netgsm",
-    "description": "Laravel Netgsm entegrasyonu.",
+    "description": "Laravel Netgsm channgel entegrasyonu.",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Tolga Can GÜNEL",
-            "email": "info@mobiius.studio"
+            "email": "info@mobius.studio"
         }
     ],
     "require": {

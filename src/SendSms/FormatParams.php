@@ -2,6 +2,7 @@
 
 namespace TCGunel\Netgsm\SendSms;
 
+use TCGunel\Netgsm\ServiceTypes;
 use TCGunel\Netgsm\Traits\FormatParamsTrait;
 
 class FormatParams
@@ -15,7 +16,7 @@ class FormatParams
     protected function gsm(&$gsm): FormatParams
     {
         switch ($this->service_type) {
-            case 'http':
+            case ServiceTypes::HTTP:
 
                 if (is_array($gsm)) {
 
@@ -61,7 +62,7 @@ class FormatParams
     protected function msg(&$msg): FormatParams
     {
         switch ($this->service_type) {
-            case 'http':
+            case ServiceTypes::HTTP:
 
                 if (is_array($msg)) {
 

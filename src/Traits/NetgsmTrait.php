@@ -3,18 +3,25 @@
 namespace TCGunel\Netgsm\Traits;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use TCGunel\Netgsm\CreditQuery\CreditQuery;
+use TCGunel\Netgsm\PackageCampaignQuery\PackageCampaignQuery;
 use TCGunel\Netgsm\SendSms\SendSms;
 use SoapClient;
+use TCGunel\Netgsm\ServiceTypes;
+use TCGunel\Netgsm\WorkTypes;
 use XMLWriter;
 
 trait NetgsmTrait
 {
+    use ErrorsTrait;
+
     /**
      * Available options are http, xml and soap.
      *
      * @var string
      */
-    public $service_type;
+    protected $service_type;
 
     /**
      * Properly named keys & values to send API.
@@ -23,23 +30,27 @@ trait NetgsmTrait
      *
      * @var array|string
      */
-    public $values_to_send;
+    protected $values_to_send;
 
-    public $work_type;
+    protected $work_type;
 
-    public $http_endpoint;
+    protected $http_endpoint;
 
-    public $soap_endpoint;
+    protected $soap_endpoint;
 
-    public $xml_endpoint;
+    protected $xml_endpoint;
 
-    public $soap_function;
+    protected $soap_function;
+
+    public $result_code;
+
+    public $result;
 
     /**
      * @param string $work_type
-     * @return SendSms|NetgsmTrait
+     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
-    public function setWorkType(string $work_type)
+    protected function setWorkType(string $work_type)
     {
         $this->work_type = $work_type;
 
@@ -48,9 +59,9 @@ trait NetgsmTrait
 
     /**
      * @param string $http_endpoint
-     * @return SendSms|NetgsmTrait
+     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
-    public function setHttpEndpoint(string $http_endpoint)
+    protected function setHttpEndpoint(string $http_endpoint)
     {
         $this->http_endpoint = $http_endpoint;
 
@@ -59,9 +70,9 @@ trait NetgsmTrait
 
     /**
      * @param string $soap_endpoint
-     * @return SendSms|NetgsmTrait
+     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
-    public function setSoapEndpoint(string $soap_endpoint)
+    protected function setSoapEndpoint(string $soap_endpoint)
     {
         $this->soap_endpoint = $soap_endpoint;
 
@@ -70,9 +81,9 @@ trait NetgsmTrait
 
     /**
      * @param string $xml_endpoint
-     * @return SendSms|NetgsmTrait
+     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
-    public function setXmlEndpoint(string $xml_endpoint)
+    protected function setXmlEndpoint(string $xml_endpoint)
     {
         $this->xml_endpoint = $xml_endpoint;
 
@@ -81,9 +92,9 @@ trait NetgsmTrait
 
     /**
      * @param string $soap_function
-     * @return SendSms|NetgsmTrait
+     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
-    public function setSoapFunction(string $soap_function)
+    protected function setSoapFunction(string $soap_function)
     {
         $this->soap_function = $soap_function;
 
@@ -91,7 +102,7 @@ trait NetgsmTrait
     }
 
     /**
-     * @return SendSms|NetgsmTrait
+     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
     protected function setValuesToSend()
     {
@@ -104,73 +115,55 @@ trait NetgsmTrait
         return $this;
     }
 
-    /**
-     * Reads responses and throws error messages taken directly from the documentation
-     *
-     * @url https://www.netgsm.com.tr/dokuman/
-     *
-     * @param string $work_type
-     * @param string $response
-     * @throws \Exception
-     */
-    protected function handleNetgsmErrors(string $work_type, string $response): void
+    protected function handleNetgsmResponses(string $work_type, string $response)
     {
         switch ($work_type) {
-            case 'sms':
+            case WorkTypes::CREDIT_QUERY:
 
-                switch ($response) {
-                    case 20:
-                        throw new \Exception(
-                            'Mesaj metninde ki problemden dolayı gönderilemediğini veya standart maksimum mesaj
-                    karakter sayısını geçtiğini ifade eder. (Standart maksimum karakter sayısı 917 dir.
-                    Eğer mesajınız türkçe karakter içeriyorsa Türkçe Karakter Hesaplama menüsunden karakter
-                    sayılarının hesaplanış şeklini görebilirsiniz.)',
-                            422
-                        );
+                switch ($this->service_type){
+                    case ServiceTypes::HTTP:
+                    case ServiceTypes::XML:
 
-                    case 30:
-                        throw new \Exception(
-                            'Geçersiz kullanıcı adı , şifre veya kullanıcınızın API erişim izninin
-                        olmadığını gösterir.Ayrıca eğer API erişiminizde IP sınırlaması yaptıysanız ve sınırladığınız ip
-                        dışında gönderim sağlıyorsanız 30 hata kodunu alırsınız. API erişim izninizi veya IP sınırlamanızı ,
-                        web arayüzden; sağ üst köşede bulunan ayarlar> API işlemleri menüsunden kontrol edebilirsiniz.',
-                            422
-                        );
+                        [$this->result_code, $this->result] = explode(' ', $response);
 
-                    case 40:
-                        throw new \Exception(
-                            'Mesaj başlığınızın (gönderici adınızın) sistemde tanımlı olmadığını
-                        ifade eder. Gönderici adlarınızı API ile sorgulayarak kontrol edebilirsiniz.',
-                            422
-                        );
+                        break;
 
-                    case 70:
-                        throw new \Exception(
-                            'Hatalı sorgulama. Gönderdiğiniz parametrelerden birisi hatalı veya zorunlu alanlardan
-                    birinin eksik olduğunu ifade eder.',
-                            422
-                        );
+                    case ServiceTypes::SOAP:
 
-                    case 80:
-                        throw new \Exception(
-                            'Gönderim sınır aşımı.',
-                            422
-                        );
+                        $this->result = $response;
 
-                    case 100:
-                    case 101:
-                        throw new \Exception(
-                            'Sistem hatası',
-                            422
-                        );
+                        break;
                 }
 
                 break;
 
-            case 'account':
+            case WorkTypes::SEND_SMS:
+
+                $this->result = $response;
+
                 break;
 
+            case WorkTypes::PACKAGE_CAMPAIGN_QUERY:
+
+                $lines = explode('<BR>', $response);
+
+                foreach ($lines as $k => $line){
+
+                    $parts = explode(' | ', $line);
+
+                    $this->result[$k] = [];
+
+                    foreach ($parts as $part){
+
+                        $this->result[$k][] = trim($part);
+
+                    }
+
+                }
+
+                break;
         }
+
     }
 
     /**
@@ -265,51 +258,9 @@ trait NetgsmTrait
     }
 
     /**
-     * @param string $service
-     * @param string|string[] $messages
-     * @param null $encoding
-     * @return int|int[]
-     */
-    public function calculateMessageLength(string $service, $messages, $encoding = null)
-    {
-        if (!is_array($messages)) {
-
-            $messages = [$messages];
-
-        }
-
-        foreach ($messages as $k => $message) {
-
-            if ($encoding === null) {
-
-                $encoding = config("netgsm.$service.params.encoding");
-
-            }
-
-            if ($encoding) {
-
-                // These characters counts as 2 each.
-                // Refer https://www.netgsm.com.tr/dokuman/#karakter-hesaplama
-                preg_match_all('/[çğışĞİŞ]/u', $message, $matches);
-
-            }
-
-            $real_message_length = mb_strlen($message);
-
-            $non_latin_length_addition = isset($matches) ? count($matches[0]) : 0;
-
-            $messages[$k] = $real_message_length + $non_latin_length_addition;
-
-        }
-
-        return count($messages) === 1 ? $messages[0] : $messages;
-    }
-
-    /**
-     * @param SendSms $instance
      * @return string
      */
-    public function getXml(): string
+    protected function getXml(): string
     {
         $xml_array = $this->prepareXmlData();
 
@@ -322,7 +273,7 @@ trait NetgsmTrait
      * @param $xml_array
      * @return string
      */
-    public function outputXml($xml_array): string
+    protected function outputXml($xml_array): string
     {
         $w = new XMLWriter();
 
@@ -337,26 +288,26 @@ trait NetgsmTrait
         return $this->values_to_send;
     }
 
-    public function send(): string
+    public function execute(): string
     {
         switch ($this->service_type) {
-            case 'http':
+            case ServiceTypes::HTTP:
 
-                return $this->sendWithHttp();
+                return $this->executeWithHttp();
 
-            case 'xml':
+            case ServiceTypes::XML:
 
-                return $this->sendWithXml();
+                return $this->executeWithXml();
 
             default:
 
-                return $this->sendWithSoap();
+                return $this->executeWithSoap();
         }
     }
 
-    public function sendWithHttp(): string
+    public function executeWithHttp(): string
     {
-        $this->setServiceType('http')->prepare();
+        $this->setServiceType(ServiceTypes::HTTP)->prepare();
 
         $response = Http::get($this->http_endpoint, $this->values_to_send);
 
@@ -364,12 +315,14 @@ trait NetgsmTrait
 
         $this->handleNetgsmErrors($this->work_type, $response->body());
 
+        $this->handleNetgsmResponses($this->work_type, $response->body());
+
         return $response->body();
     }
 
-    public function sendWithSoap(): string
+    public function executeWithSoap(): string
     {
-        $this->setServiceType('soap')->prepare();
+        $this->setServiceType(ServiceTypes::SOAP)->prepare();
 
         $client = new SoapClient($this->soap_endpoint);
 
@@ -377,12 +330,14 @@ trait NetgsmTrait
 
         $this->handleNetgsmErrors($this->work_type, $result->return);
 
+        $this->handleNetgsmResponses($this->work_type, $this->work_type);
+
         return $result->return;
     }
 
-    public function sendWithXml(): string
+    public function executeWithXml(): string
     {
-        $this->setServiceType('xml')->prepare()->getXml();
+        $this->setServiceType(ServiceTypes::XML)->prepare()->getXml();
 
         $response = Http::withHeaders([
             "Content-Type" => "text/xml;charset=utf-8"
@@ -393,6 +348,8 @@ trait NetgsmTrait
         $response->throw();
 
         $this->handleNetgsmErrors($this->work_type, $response->body());
+
+        $this->handleNetgsmResponses($this->work_type, $response->body());
 
         return $response->body();
     }
