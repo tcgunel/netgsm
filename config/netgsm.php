@@ -91,22 +91,16 @@ return [
         ],
     ],
 
-    'account' => [
-
-        /*
-        |--------------------------------------------------------------------------
-        | Service Type
-        |--------------------------------------------------------------------------
-        |
-        | Netgsm lets developers to choose between 3 methods to consume API.
-        | These are SOAP Service, XML POST and HTTP GET.
-        | Options are soap, xml, http.
-        | Default or empty option is xml.
-        |
-        */
+    'credit_query' => [
 
         'service' => 'xml',
 
-    ]
+    ],
+
+    'package_campaign_query' => [
+
+        'service' => 'xml',
+
+    ],
 
 ];
