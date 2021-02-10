@@ -1,6 +1,7 @@
 <?php
 
 namespace TCGunel\Netgsm\SendSms;
+ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
 
 use TCGunel\Netgsm\ServiceTypes;
 use TCGunel\Netgsm\Traits\FormatParamsTrait;
@@ -92,11 +93,11 @@ class FormatParams
     }
 
     /**
-     * @param string $header
+     * @param string|null $header
      * @param string $username
      * @return FormatParams
      */
-    protected function header(string &$header, string $username): FormatParams
+    protected function header(?string &$header, string $username): FormatParams
     {
         if (in_array($header, ['', null])) {
 
