@@ -3,25 +3,17 @@
 namespace TCGunel\Netgsm\Traits;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use TCGunel\Netgsm\CreditQuery\CreditQuery;
 use TCGunel\Netgsm\PackageCampaignQuery\PackageCampaignQuery;
 use TCGunel\Netgsm\SendSms\SendSms;
 use SoapClient;
+use TCGunel\Netgsm\Services\NetgsmLogger;
 use TCGunel\Netgsm\ServiceTypes;
-use TCGunel\Netgsm\WorkTypes;
 use XMLWriter;
 
 trait NetgsmTrait
 {
-    use ErrorsTrait;
-
-    /**
-     * Available options are http, xml and soap.
-     *
-     * @var string
-     */
-    protected $service_type;
+    use ErrorsTrait, SuccessfulResponseTrait;
 
     /**
      * Properly named keys & values to send API.
@@ -53,6 +45,8 @@ trait NetgsmTrait
     protected function setWorkType(string $work_type)
     {
         $this->work_type = $work_type;
+
+        NetgsmLogger::$work_type = $this->work_type;
 
         return $this;
     }
@@ -112,58 +106,9 @@ trait NetgsmTrait
 
         }
 
+        NetgsmLogger::$payload = $this->values_to_send;
+
         return $this;
-    }
-
-    protected function handleNetgsmResponses(string $work_type, string $response)
-    {
-        switch ($work_type) {
-            case WorkTypes::CREDIT_QUERY:
-
-                switch ($this->service_type){
-                    case ServiceTypes::HTTP:
-                    case ServiceTypes::XML:
-
-                        [$this->result_code, $this->result] = explode(' ', $response);
-
-                        break;
-
-                    case ServiceTypes::SOAP:
-
-                        $this->result = $response;
-
-                        break;
-                }
-
-                break;
-
-            case WorkTypes::SEND_SMS:
-
-                $this->result = $response;
-
-                break;
-
-            case WorkTypes::PACKAGE_CAMPAIGN_QUERY:
-
-                $lines = explode('<BR>', $response);
-
-                foreach ($lines as $k => $line){
-
-                    $parts = explode(' | ', $line);
-
-                    $this->result[$k] = [];
-
-                    foreach ($parts as $part){
-
-                        $this->result[$k][] = trim($part);
-
-                    }
-
-                }
-
-                break;
-        }
-
     }
 
     /**
@@ -315,7 +260,7 @@ trait NetgsmTrait
 
         $this->handleNetgsmErrors($this->work_type, $response->body());
 
-        $this->handleNetgsmResponses($this->work_type, $response->body());
+        $this->handleNetgsmResponse($this->work_type, $response->body());
 
         return $response->body();
     }
@@ -330,7 +275,7 @@ trait NetgsmTrait
 
         $this->handleNetgsmErrors($this->work_type, $result->return);
 
-        $this->handleNetgsmResponses($this->work_type, $this->work_type);
+        $this->handleNetgsmResponse($this->work_type, $this->work_type);
 
         return $result->return;
     }
@@ -349,7 +294,7 @@ trait NetgsmTrait
 
         $this->handleNetgsmErrors($this->work_type, $response->body());
 
-        $this->handleNetgsmResponses($this->work_type, $response->body());
+        $this->handleNetgsmResponse($this->work_type, $response->body());
 
         return $response->body();
     }

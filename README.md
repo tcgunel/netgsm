@@ -47,6 +47,8 @@ Aşağıdaki ayarlar yapılabilmektedir;
 
 * (string) password => Genel olarak kullanmak istenilen hesabın şifre bilgisi.
 
+* (bool) log => Loglama işlemini aktif et, api ile yapılan her işlemi kayıt altına alır. 
+  
 * (string) service => Xml, soap veya http. 
 
 * (bool) encoding => Türkçe desteği açıp kapat. Gönderilen SMS'lerdeki karakter hesabı bu ayara göre değişebilir. [Referans](https://www.netgsm.com.tr/dokuman/#soap-servisi-sms-g%C3%B6nderme)
@@ -56,6 +58,11 @@ Aşağıdaki ayarlar yapılabilmektedir;
 * (string) filter => İzinli data filtrenizi uygulamak isterseniz '1' olarak gönderebilirsiniz. [Referans](https://www.netgsm.com.tr/dokuman/#soap-servisi-sms-g%C3%B6nderme)
 
 * (string) bayikodu => Bayilik kodunuz varsa.
+
+3) Loglama aktif olduğunda gerekli migration dosyasını publish etmek için,
+```
+php artisan vendor:publish --provider="TCGunel\Netgsm\NetgsmServiceProvider" --tag="migrations"
+```
 
 ## Lumen compatibility
 

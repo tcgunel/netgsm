@@ -15,7 +15,10 @@
         "illuminate/support": "*",
         "ext-soap": "*",
         "ext-xmlwriter": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "illuminate/database": "^8.27",
+        "illuminate/http": "^8.27",
+        "illuminate/notifications": "^8.27"
     },
     "minimum-stability": "beta",
     "autoload": {
