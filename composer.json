@@ -1,6 +1,6 @@
 {
     "name": "tcgunel/netgsm",
-    "description": "Laravel Netgsm channgel entegrasyonu.",
+    "description": "Laravel Netgsm channel entegrasyonu.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -26,11 +26,24 @@
             "TCGunel\\Netgsm\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "TCGunel\\Netgsm\\Tests\\": "tests"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
                 "TCGunel\\Netgsm\\NetgsmServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "^6.12"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     }
 }
