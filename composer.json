@@ -46,7 +46,7 @@
         "brianium/paratest": "^6.2"
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "test": "vendor/bin/paratest --processes 6",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     }
 }
