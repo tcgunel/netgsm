@@ -2,6 +2,7 @@
 
 namespace TCGunel\Netgsm\Traits;
 
+use TCGunel\Netgsm\Exceptions\NetgsmRequiredFieldsException;
 use TCGunel\Netgsm\SendSms\Params as SendSmsParams;
 use TCGunel\Netgsm\CreditQuery\Params as CreditQueryParams;
 use TCGunel\Netgsm\PackageCampaignQuery\Params as PackageCampaignQueryParams;
@@ -68,6 +69,14 @@ trait ParamsTrait
     }
 
     /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
      * @param string $password
      * @return SendSmsParams|CreditQueryParams|PackageCampaignQueryParams|ParamsTrait
      */
@@ -76,6 +85,14 @@ trait ParamsTrait
         $this->password = $password;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
     }
 
     /**
@@ -128,7 +145,7 @@ trait ParamsTrait
 
             $message = sprintf('Required fields for Netgsm are empty %s.', join(', ', array_keys($errors)));
 
-            throw new \Exception($message, 422);
+            throw new NetgsmRequiredFieldsException($message, 422);
 
         }
 

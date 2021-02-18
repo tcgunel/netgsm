@@ -2,6 +2,8 @@
 
 namespace TCGunel\Netgsm\SendSms;
 
+use CodeDredd\Soap\Facades\Soap;
+use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\Traits\NetgsmTrait;
 use TCGunel\Netgsm\WorkTypes;
 
@@ -16,8 +18,10 @@ class SendSms extends Params
      * XML is better among others.
      * http doesn't support n:n,
      * soap may be problematic.
+     *
+     * @param null|Soap|Http $request_client
      */
-    public function __construct()
+    public function __construct($request_client = null)
     {
         parent::__construct();
 
@@ -27,7 +31,8 @@ class SendSms extends Params
             ->setWorkType(WorkTypes::SEND_SMS)
             ->setHttpEndpoint('https://api.netgsm.com.tr/sms/send/get/')
             ->setSoapEndpoint('http://soap.netgsm.com.tr:8080/Sms_webservis/SMS?wsdl')
-            ->setXmlEndpoint('https://api.netgsm.com.tr/sms/send/xml');
+            ->setXmlEndpoint('https://api.netgsm.com.tr/sms/send/xml')
+            ->setRequestClient($request_client);
     }
 
     /**
@@ -49,7 +54,8 @@ class SendSms extends Params
             ->validateParams()
             ->formatParamsByService($this->service_type)
             ->setValuesToSend()
-            ->setSoapFunction(is_array($this->msg) ? 'smsGonderNNV2' : 'smsGonder1NV2');
+            ->setSoapFunction(is_array($this->msg) ? 'smsGonderNNV2' : 'smsGonder1NV2')
+            ->setRequestClient(null, $this->service_type);
 
         return $this;
     }

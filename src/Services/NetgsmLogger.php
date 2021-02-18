@@ -4,7 +4,6 @@ namespace TCGunel\Netgsm\Services;
 
 use Illuminate\Database\Eloquent\Model;
 use TCGunel\Netgsm\Models\NetgsmLog;
-use TCGunel\Netgsm\WorkTypes;
 
 class NetgsmLogger
 {
@@ -46,7 +45,7 @@ class NetgsmLogger
                     'netgsm_loggable_id' => self::$netgsm_loggable_id,
                     'netgsm_loggable_type' => self::$netgsm_loggable_type,
 
-                    'work_type' => WorkTypes::readable(self::$work_type),
+                    'work_type' => self::$work_type,
                     'response_type' => self::$response_type,
                     'response_message' => self::$response_message,
                     'response_code' => self::$response_code,

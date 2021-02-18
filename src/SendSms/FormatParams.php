@@ -1,8 +1,8 @@
 <?php
 
 namespace TCGunel\Netgsm\SendSms;
-ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
 
+use TCGunel\Netgsm\Exceptions\NetgsmSendSmsException;
 use TCGunel\Netgsm\ServiceTypes;
 use TCGunel\Netgsm\Traits\FormatParamsTrait;
 
@@ -67,7 +67,7 @@ class FormatParams
 
                 if (is_array($msg)) {
 
-                    throw new \Exception('N:N Sms gönderimleriniz için soap veya xml servislerini kullanmalısınız.');
+                    throw new NetgsmSendSmsException('N:N Sms gönderimleriniz için soap veya xml servislerini kullanmalısınız.');
 
                 }
 

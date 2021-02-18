@@ -48,17 +48,23 @@ trait SuccessfulResponseTrait
 
         NetgsmLogger::$response_code = $response;
 
-        if (in_array($parts[0], self::$send_sms)){
+        if (in_array($parts[0], array_keys(self::$send_sms))) {
 
             NetgsmLogger::$response_message = self::$send_sms[$parts[0]];
+
+            $this->result_code = $parts[0];
+
+            $this->result = $parts[1];
+
+        } else {
+
+            $this->result = $response;
 
         }
 
         NetgsmLogger::$response_type = ResponseTypes::SUCCESS;
 
         NetgsmLogger::create();
-
-        $this->result = $response;
     }
 
     protected function credit_query(string $response)
@@ -89,20 +95,28 @@ trait SuccessfulResponseTrait
 
     protected function package_campaign_query(string $response)
     {
-        $lines = explode('<BR>', $response);
+        $lines = preg_split('/<br>/i', $response);
 
         foreach ($lines as $k => $line) {
 
-            $parts = explode(' | ', $line);
+            $parts = explode('|', $line);
 
             $this->result[$k] = [];
 
             foreach ($parts as $part) {
 
-                $this->result[$k][] = trim($part);
+                $trimmed = trim($part);
+
+                if ($trimmed !== "") {
+
+                    $this->result[$k][] = $trimmed;
+
+                }
 
             }
         }
+
+        $this->result = array_filter($this->result);
 
         NetgsmLogger::$response_code = null;
 

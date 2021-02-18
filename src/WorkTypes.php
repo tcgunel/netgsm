@@ -10,7 +10,11 @@ class WorkTypes
 
     public const PACKAGE_CAMPAIGN_QUERY = 'package_campaign_query';
 
-    public static function readable(string $type): string
+    /**
+     * @param string|null $type
+     * @return array|string
+     */
+    public static function readable(?string $type = null)
     {
         $arr = [
             self::SEND_SMS => __('SMS Gönderimi'),
@@ -18,6 +22,6 @@ class WorkTypes
             self::PACKAGE_CAMPAIGN_QUERY => __('Paket Kampanya Sorgulama'),
         ];
 
-        return $arr[$type] ?? '';
+        return $arr[$type] ?? $arr;
     }
 }

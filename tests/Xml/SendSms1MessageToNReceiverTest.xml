@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mainbody>
+    <header>
+        <company dil="TR">Netgsm</company>
+        <usercode>usercode</usercode>
+        <password>password</password>
+        <type>1:n</type>
+        <msgheader>msgheader</msgheader>
+    </header>
+    <body>
+        <msg><![CDATA[msg]]></msg>
+        <no>no</no>
+        <no>no</no>
+        <no>no</no>
+    </body>
+</mainbody>

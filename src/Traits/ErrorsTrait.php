@@ -3,6 +3,7 @@
 namespace TCGunel\Netgsm\Traits;
 
 use TCGunel\Netgsm\Constants\ResponseTypes;
+use TCGunel\Netgsm\Exceptions\NetgsmException;
 use TCGunel\Netgsm\Services\NetgsmLogger;
 
 trait ErrorsTrait
@@ -66,6 +67,30 @@ trait ErrorsTrait
     ];
 
     /**
+     * @return string[]
+     */
+    public static function getCreditQueryErrors(): array
+    {
+        return self::$credit_query_errors;
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getPackageCampaignQueryErrors(): array
+    {
+        return self::$package_campaign_query_errors;
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getSendSmsErrors(): array
+    {
+        return self::$send_sms_errors;
+    }
+
+    /**
      * Reads responses and throws error messages taken directly from the documentation
      *
      * @url https://www.netgsm.com.tr/dokuman/
@@ -90,7 +115,7 @@ trait ErrorsTrait
 
                 NetgsmLogger::create();
 
-                throw new \Exception(self::${$property}[$response], 422);
+                throw new NetgsmException(self::${$property}[$response], 422);
             }
 
         }

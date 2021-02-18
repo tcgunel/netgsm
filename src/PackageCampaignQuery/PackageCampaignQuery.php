@@ -2,6 +2,8 @@
 
 namespace TCGunel\Netgsm\PackageCampaignQuery;
 
+use CodeDredd\Soap\Facades\Soap;
+use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\Traits\NetgsmTrait;
 use TCGunel\Netgsm\WorkTypes;
 
@@ -16,8 +18,10 @@ class PackageCampaignQuery extends Params
      * XML is better among others.
      * http doesn't support n:n,
      * soap may be problematic.
+     *
+     * @param null|Soap|Http $request_client
      */
-    public function __construct()
+    public function __construct($request_client = null)
     {
         parent::__construct();
 
@@ -27,7 +31,8 @@ class PackageCampaignQuery extends Params
             ->setWorkType(WorkTypes::PACKAGE_CAMPAIGN_QUERY)
             ->setHttpEndpoint('https://api.netgsm.com.tr/balance/list/get')
             ->setSoapEndpoint('http://soap.netgsm.com.tr:8080/Sms_webservis/SMS?wsdl')
-            ->setXmlEndpoint('https://api.netgsm.com.tr/balance/list/xml');
+            ->setXmlEndpoint('https://api.netgsm.com.tr/balance/list/xml')
+            ->setRequestClient($request_client);
     }
 
     /**
@@ -49,7 +54,8 @@ class PackageCampaignQuery extends Params
             ->validateParams()
             ->formatParamsByService($this->service_type)
             ->setValuesToSend()
-            ->setSoapFunction('paketkampanya');
+            ->setSoapFunction('paketkampanya')
+            ->setRequestClient(null, $this->service_type);
 
         return $this;
     }

@@ -252,7 +252,7 @@ class Params extends FormatParams
         $this
             ->gsm($this->gsm)
             ->msg($this->msg)
-            ->header($this->header, $this->username)
+            ->header($this->header, $this->getUsername())
             ->password($this->password)
             ->setType($this->msg, $this->gsm);
 

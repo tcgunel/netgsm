@@ -2,11 +2,11 @@
 
 namespace TCGunel\Netgsm\Traits;
 
+use CodeDredd\Soap\Facades\Soap;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\CreditQuery\CreditQuery;
 use TCGunel\Netgsm\PackageCampaignQuery\PackageCampaignQuery;
 use TCGunel\Netgsm\SendSms\SendSms;
-use SoapClient;
 use TCGunel\Netgsm\Services\NetgsmLogger;
 use TCGunel\Netgsm\ServiceTypes;
 use XMLWriter;
@@ -34,9 +34,48 @@ trait NetgsmTrait
 
     protected $soap_function;
 
+    protected $request_client;
+
     public $result_code;
 
     public $result;
+
+    /**
+     * @return Soap|Http
+     */
+    public function getRequestClient()
+    {
+        return $this->request_client;
+    }
+
+    /**
+     * @param null|Soap|Http $request_client
+     * @param null|string $service_type
+     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
+     */
+    public function setRequestClient($request_client = null, $service_type = null)
+    {
+        $this->request_client = $request_client;
+
+        if (is_null($this->request_client)) {
+
+            switch ($service_type) {
+                case ServiceTypes::SOAP:
+
+                    $this->request_client = Soap::class;
+
+                    break;
+                default:
+
+                    $this->request_client = Http::class;
+
+                    break;
+            }
+
+        }
+
+        return $this;
+    }
 
     /**
      * @param string $work_type
@@ -218,7 +257,7 @@ trait NetgsmTrait
      * @param $xml_array
      * @return string
      */
-    protected function outputXml($xml_array): string
+    public function outputXml($xml_array): string
     {
         $w = new XMLWriter();
 
@@ -250,11 +289,15 @@ trait NetgsmTrait
         }
     }
 
+    /**
+     * @return string
+     * @throws \Illuminate\Http\Client\RequestException|\Exception
+     */
     public function executeWithHttp(): string
     {
         $this->setServiceType(ServiceTypes::HTTP)->prepare();
 
-        $response = Http::get($this->http_endpoint, $this->values_to_send);
+        $response = $this->getRequestClient()::get($this->http_endpoint, $this->values_to_send);
 
         $response->throw();
 
@@ -265,26 +308,35 @@ trait NetgsmTrait
         return $response->body();
     }
 
+    /**
+     * @return string
+     * @throws \CodeDredd\Soap\Exceptions\RequestException|\Exception
+     */
     public function executeWithSoap(): string
     {
         $this->setServiceType(ServiceTypes::SOAP)->prepare();
 
-        $client = new SoapClient($this->soap_endpoint);
+        $result = $this->request_client::baseWsdl($this->soap_endpoint)
+            ->call($this->soap_function, $this->values_to_send)
+            ->throw()
+            ->json();
 
-        $result = $client->__soapCall($this->soap_function, array('parameters' => $this->values_to_send));
+        $this->handleNetgsmErrors($this->work_type, $result['return']);
 
-        $this->handleNetgsmErrors($this->work_type, $result->return);
+        $this->handleNetgsmResponse($this->work_type, $result['return']);
 
-        $this->handleNetgsmResponse($this->work_type, $this->work_type);
-
-        return $result->return;
+        return $result['return'];
     }
 
+    /**
+     * @return string
+     * @throws \Illuminate\Http\Client\RequestException|\Exception
+     */
     public function executeWithXml(): string
     {
         $this->setServiceType(ServiceTypes::XML)->prepare()->getXml();
 
-        $response = Http::withHeaders([
+        $response = $this->getRequestClient()::withHeaders([
             "Content-Type" => "text/xml;charset=utf-8"
         ])->send('POST', $this->xml_endpoint, [
             'body' => $this->values_to_send
