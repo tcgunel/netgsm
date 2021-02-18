@@ -19,7 +19,7 @@
         "illuminate/database": "*",
         "illuminate/http": "*",
         "illuminate/notifications": "*",
-        "codedredd/laravel-soap": "^2.0@beta"
+        "codedredd/laravel-soap": "^1"
     },
     "minimum-stability": "beta",
     "autoload": {
