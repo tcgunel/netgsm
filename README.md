@@ -28,7 +28,11 @@ geliştirme yapılacaktır.
 ## Requirements
 | PHP    | Laravel | Package |
 |--------|---------|---------|
-| ^7.2.5 | 7.x     | v0.0.1  |
+| ^7.2.5 | 7.x     | v1.0.0  |
+
+| PHP    | Laravel | Package |
+|--------|---------|---------|
+| ^7.2.5 | 8.x     | v2.0.0  |
 
 ## Kurulum
 
@@ -144,6 +148,11 @@ $packageCampaignQuery
 $packageCampaignQuery->execute();
 
 $packageCampaignQuery->result; // Hesaba bağlı tüm paket bilgisini array[] olarak barındırır.
+```
+
+## Test
+```
+composer test
 ```
 
 ## Authors
