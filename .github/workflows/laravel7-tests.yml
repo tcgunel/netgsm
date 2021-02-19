@@ -19,7 +19,7 @@
             - laravel: 7.*
               testbench: 5.*
 
-      name: P${{ matrix.php }} - L${{ martix.level }} - ${{ matrix.dependency-version }} - ${{ martix.os }}
+      name: P${{ matrix.php }} - L${{ matrix.level }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
       steps:
         - name: Checkout code
