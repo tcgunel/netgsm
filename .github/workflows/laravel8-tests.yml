@@ -3,6 +3,8 @@ name: laravel-8-tests
 on:
   push:
     branches: [ laravel8 ]
+    paths-ignore:
+      - '**/README.md'
   pull_request:
     branches: [ laravel8 ]
 
