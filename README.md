@@ -1,11 +1,13 @@
 [![License](https://poser.pugx.org/tcgunel/netgsm/license)](https://packagist.org/packages/tcgunel/netgsm)
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/tcgunel/netgsm)
+[![PHP Composer](https://github.com/tcgunel/netgsm/actions/workflows/laravel7-tests.yml/badge.svg?branch=master)](https://github.com/tcgunel/netgsm/actions/workflows/laravel7-tests.yml)
+[![PHP Composer](https://github.com/tcgunel/netgsm/actions/workflows/laravel8-tests.yml/badge.svg?branch=laravel8)](https://github.com/tcgunel/netgsm/actions/workflows/laravel8-tests.yml)
 
 # Laravel Netgsm Channel Entegrasyonu (Laravel 7.x|8.x)
 Netgsm hizmetlerini laravel ile kolay ve hızlıca kullanmaya başlamak için geliştirilen bir paket. Netgsm
 tarafından sunulan tüm metodları (SOAP Servisi, XML POST ve HTTP GET) destekleyecek şekilde hazırlanmıştır.
 
-Şimdilik sadece SMS hizmetleri için geliştirme yapılıyor diğer hizmetler için de gerekli oldukça 
+Şimdilik sadece SMS hizmetleri için geliştirme yapılıyor diğer hizmetler için de gerekli oldukça
 geliştirme yapılacaktır.
 
 ### SMS Yapılacaklar Listesi
@@ -51,9 +53,9 @@ Aşağıdaki ayarlar yapılabilmektedir;
 
 * (string) password => Genel olarak kullanmak istenilen hesabın şifre bilgisi.
 
-* (bool) log => Loglama işlemini aktif et, api ile yapılan her işlemi kayıt altına alır. 
-  
-* (string) service => Xml, soap veya http. 
+* (bool) log => Loglama işlemini aktif et, api ile yapılan her işlemi kayıt altına alır.
+
+* (string) service => Xml, soap veya http.
 
 * (bool) encoding => Türkçe desteği açıp kapat. Gönderilen SMS'lerdeki karakter hesabı bu ayara göre değişebilir. [Referans](https://www.netgsm.com.tr/dokuman/#soap-servisi-sms-g%C3%B6nderme)
 
@@ -153,6 +155,10 @@ $packageCampaignQuery->result; // Hesaba bağlı tüm paket bilgisini array[] ol
 ## Test
 ```
 composer test
+```
+For windows:
+```
+vendor\bin\paratest.bat
 ```
 
 ## Authors
