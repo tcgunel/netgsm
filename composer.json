@@ -10,16 +10,13 @@
         }
     ],
     "require": {
-        "php": "^7.2.5|^8.0",
+        "php": "^7.2.5 || ^8.0",
         "guzzlehttp/guzzle": "*",
-        "illuminate/support": "*",
+        "laravel/framework": "^8",
         "ext-soap": "*",
         "ext-xmlwriter": "*",
         "ext-curl": "*",
-        "illuminate/database": "*",
-        "illuminate/http": "*",
-        "illuminate/notifications": "*",
-        "codedredd/laravel-soap": "^v1"
+        "codedredd/laravel-soap": "^v2"
     },
     "minimum-stability": "beta",
     "autoload": {
