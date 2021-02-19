@@ -2,9 +2,7 @@
 
 namespace TCGunel\Netgsm\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use TCGunel\Netgsm\Database\Factories\NetgsmLogFactory;
 
 /**
  * Class NetgsmLog
@@ -22,7 +20,6 @@ use TCGunel\Netgsm\Database\Factories\NetgsmLogFactory;
  */
 class NetgsmLog extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'netgsm_loggable_id',
@@ -41,10 +38,5 @@ class NetgsmLog extends Model
     public function netgsm_loggable()
     {
         return $this->morphTo();
-    }
-
-    protected static function newFactory()
-    {
-        return NetgsmLogFactory::new();
     }
 }

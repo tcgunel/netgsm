@@ -14,6 +14,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->faker = \Faker\Factory::create("tr_TR");
 
+        $this->withFactories(__DIR__.'/../database/factories');
+
         // additional setup
     }
 

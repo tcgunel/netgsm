@@ -2,34 +2,31 @@
 
 namespace TCGunel\Netgsm\Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use TCGunel\Netgsm\Models\NetgsmLog;
 use TCGunel\Netgsm\Tests\User;
 use TCGunel\Netgsm\WorkTypes;
 
-class NetgsmLogFactory extends Factory
-{
-    protected $model = NetgsmLog::class;
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+use Faker\Generator as Faker;
 
-    public function definition()
-    {
-        $user = User::factory()->create();
+$factory->define(NetgsmLog::class, function (Faker $faker) {
 
-        return [
-            'netgsm_loggable_id' => $user->id,
-            'netgsm_loggable_type' => get_class($user),
+    $user = factory(User::class)->create();
 
-            'work_type' => $this->faker->randomElement(array_keys(WorkTypes::readable())),
-            'response_code' => $this->faker->randomElement(['00', '01', '02', '1000', '1001']),
-            'response_type' => $this->faker->randomElement([0, 1]),
-            'response_message' => $this->faker->realText(500),
-            'payload' => (object)[
-                'a' => 1,
-                'b' => 2,
-                'c' => 3,
-                'd' => 4,
-            ],
-        ];
-    }
+    return [
+        'netgsm_loggable_id' => $user->id,
+        'netgsm_loggable_type' => get_class($user),
 
-}
+        'work_type' => $faker->randomElement(array_keys(WorkTypes::readable())),
+        'response_code' => $faker->randomElement(['00', '01', '02', '1000', '1001']),
+        'response_type' => $faker->randomElement([0, 1]),
+        'response_message' => $faker->realText(500),
+        'payload' => (object)[
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+            'd' => 4,
+        ],
+    ];
+
+});
