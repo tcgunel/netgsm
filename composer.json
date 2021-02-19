@@ -10,9 +10,11 @@
         }
     ],
     "require": {
-        "php": "^7.2.5 || ^8.0",
+        "php": "^7.2 || ^8.0",
         "guzzlehttp/guzzle": "*",
-        "laravel/framework": "^8",
+        "illuminate/notifications": "^v8",
+        "illuminate/database": "^v8",
+        "illuminate/support": "^v8",
         "ext-soap": "*",
         "ext-xmlwriter": "*",
         "ext-curl": "*",
@@ -39,7 +41,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "orchestra/testbench": "^6.12",
+        "orchestra/testbench": "^6",
         "brianium/paratest": "^6.2"
     },
     "scripts": {
