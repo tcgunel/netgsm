@@ -42,7 +42,7 @@ jobs:
 
       - name: Install dependencies
         run:
-          composer install --no-interaction
+          composer update --no-interaction
 
       - name: Execute tests
         run: composer test
