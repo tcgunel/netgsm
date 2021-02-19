@@ -2,9 +2,9 @@ name: laravel-7-tests
 
 on:
   push:
-    branches: [ laravel7 ]
+    branches: [ master ]
   pull_request:
-    branches: [ laravel7 ]
+    branches: [ master ]
 
 jobs:
 
@@ -46,6 +46,3 @@ jobs:
 
       - name: Execute tests
         run: composer test
-
-
-
