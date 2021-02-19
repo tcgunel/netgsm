@@ -20,7 +20,7 @@
         "ext-curl": "*",
         "codedredd/laravel-soap": "^v1"
     },
-    "minimum-stability": "beta",
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "TCGunel\\Netgsm\\": "src/",
