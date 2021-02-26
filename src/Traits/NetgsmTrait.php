@@ -5,6 +5,8 @@ namespace TCGunel\Netgsm\Traits;
 use CodeDredd\Soap\Facades\Soap;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\CreditQuery\CreditQuery;
+use TCGunel\Netgsm\Exceptions\NetgsmException;
+use TCGunel\Netgsm\Exceptions\NetgsmServiceNotAvailableException;
 use TCGunel\Netgsm\PackageCampaignQuery\PackageCampaignQuery;
 use TCGunel\Netgsm\SendSms\SendSms;
 use TCGunel\Netgsm\Services\NetgsmLogger;
@@ -279,13 +281,14 @@ trait NetgsmTrait
 
                 return $this->executeWithHttp();
 
-            case ServiceTypes::XML:
+            case ServiceTypes::SOAP:
 
-                return $this->executeWithXml();
+                return $this->executeWithSoap();
 
             default:
 
-                return $this->executeWithSoap();
+                return $this->executeWithXml();
+
         }
     }
 
@@ -295,7 +298,10 @@ trait NetgsmTrait
      */
     public function executeWithHttp(): string
     {
-        $this->setServiceType(ServiceTypes::HTTP)->prepare();
+        $this
+            ->setServiceType(ServiceTypes::HTTP)
+            ->checkServiceAvailability(ServiceTypes::HTTP)
+            ->prepare();
 
         $response = $this->getRequestClient()::get($this->http_endpoint, $this->values_to_send);
 
@@ -314,7 +320,10 @@ trait NetgsmTrait
      */
     public function executeWithSoap(): string
     {
-        $this->setServiceType(ServiceTypes::SOAP)->prepare();
+        $this
+            ->setServiceType(ServiceTypes::SOAP)
+            ->checkServiceAvailability(ServiceTypes::SOAP)
+            ->prepare();
 
         $result = $this->request_client::baseWsdl($this->soap_endpoint)
             ->call($this->soap_function, $this->values_to_send)
@@ -334,7 +343,11 @@ trait NetgsmTrait
      */
     public function executeWithXml(): string
     {
-        $this->setServiceType(ServiceTypes::XML)->prepare()->getXml();
+        $this
+            ->setServiceType(ServiceTypes::XML)
+            ->checkServiceAvailability(ServiceTypes::XML)
+            ->prepare()
+            ->getXml();
 
         $response = $this->getRequestClient()::withHeaders([
             "Content-Type" => "text/xml;charset=utf-8"
@@ -350,4 +363,28 @@ trait NetgsmTrait
 
         return $response->body();
     }
+
+    protected function checkServiceAvailability(string $service_type)
+    {
+        if (property_exists(self::class, 'available_services')) {
+
+            if (!in_array($service_type, $this->available_services)) {
+
+                $message = __('This service (%service_type) is not available for this operation. Please use one of the following %available_services.');
+
+                throw new NetgsmServiceNotAvailableException(
+                    strtr($message, [
+                        '%service_type' => $service_type,
+                        '%available_services' => join(', ', $this->available_services)
+                    ])
+                );
+
+            }
+
+        }
+
+        return $this;
+
+    }
+
 }

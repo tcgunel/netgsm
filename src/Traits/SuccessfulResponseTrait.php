@@ -126,4 +126,41 @@ trait SuccessfulResponseTrait
 
         NetgsmLogger::create();
     }
+
+    protected function send_otp_sms(string $response)
+    {
+        switch ($this->service_type) {
+            case ServiceTypes::HTTP:
+
+                [$this->result_code, $this->result] = explode(' ', $response);
+
+                break;
+
+            case ServiceTypes::XML:
+
+                $xml = new \SimpleXMLElement($response);
+
+                foreach ($xml->main->children() as $xml_node_name => $xml_node_value ){
+
+                    if ($xml_node_name == 'code'){
+                        $this->result_code = (string) $xml_node_value;
+                    }
+
+                    if ($xml_node_name == 'jobID'){
+                        $this->result = (int) $xml_node_value;
+                    }
+
+                }
+
+                break;
+        }
+
+        NetgsmLogger::$response_code = $this->result_code;
+
+        NetgsmLogger::$response_message = $this->result;
+
+        NetgsmLogger::$response_type = ResponseTypes::SUCCESS;
+
+        NetgsmLogger::create();
+    }
 }

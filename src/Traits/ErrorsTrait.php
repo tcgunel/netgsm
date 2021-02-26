@@ -66,6 +66,39 @@ trait ErrorsTrait
         "101" => "Sistem hatası"
     ];
 
+    private static $send_otp_sms_errors = [
+        "20" => "Mesaj metni ya da mesaj boyunu kontrol ediniz.",
+        "21" => "Mesaj metni ya da mesaj boyunu kontrol ediniz.",
+
+        "30" => "Geçersiz kullanıcı adı , şifre veya kullanıcınızın API erişim izninin
+                olmadığını gösterir.Ayrıca eğer API erişiminizde IP sınırlaması yaptıysanız ve sınırladığınız ip
+                dışında gönderim sağlıyorsanız 30 hata kodunu alırsınız. API erişim izninizi veya IP sınırlamanızı ,
+                web arayüzden; sağ üst köşede bulunan ayarlar> API işlemleri menüsunden kontrol edebilirsiniz.",
+        "39" => "Geçersiz kullanıcı adı , şifre veya kullanıcınızın API erişim izninin
+                olmadığını gösterir.Ayrıca eğer API erişiminizde IP sınırlaması yaptıysanız ve sınırladığınız ip
+                dışında gönderim sağlıyorsanız 30 hata kodunu alırsınız. API erişim izninizi veya IP sınırlamanızı ,
+                web arayüzden; sağ üst köşede bulunan ayarlar> API işlemleri menüsunden kontrol edebilirsiniz.",
+
+        "40" => "Gönderici adınızı kontrol ediniz.",
+        "41" => "Gönderici adınızı kontrol ediniz.",
+
+        "50" => "Gönderilen numarayı kontrol ediniz.",
+        "52" => "Gönderilen numarayı kontrol ediniz.",
+
+        "60" => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
+        "63" => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
+        "64" => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
+        "69" => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
+
+        "70" => "Input parametrelerini kontrol ediniz.",
+        "79" => "Input parametrelerini kontrol ediniz.",
+
+        "80" => "Sorgulama sınır aşımı.(dakikada 100 adet gönderim yapılabilir.)",
+
+        "100" => "Sistem hatası",
+        "110" => "Sistem hatası",
+    ];
+
     /**
      * @return string[]
      */
@@ -91,6 +124,14 @@ trait ErrorsTrait
     }
 
     /**
+     * @return string[]
+     */
+    public static function getSendOtpSmsErrors(): array
+    {
+        return self::$send_otp_sms_errors;
+    }
+
+    /**
      * Reads responses and throws error messages taken directly from the documentation
      *
      * @url https://www.netgsm.com.tr/dokuman/
@@ -104,6 +145,8 @@ trait ErrorsTrait
         $property = $work_type . '_errors';
 
         if (property_exists(self::class, $property)) {
+
+            $response = self::getCodeFromXmlResponse($response);
 
             if (in_array($response, array_keys(self::${$property}))) {
 
@@ -119,5 +162,24 @@ trait ErrorsTrait
             }
 
         }
+    }
+
+    protected function getCodeFromXmlResponse(string $response)
+    {
+        if (strpos($response, '<?xml') !== FALSE) {
+
+            $xml = new \SimpleXMLElement($response);
+
+            foreach ($xml->main->children() as $xml_node_name => $xml_node_value ){
+
+                if ($xml_node_name == 'code'){
+
+                    return (string) $xml_node_value;
+
+                }
+            }
+        }
+
+        return $response;
     }
 }
