@@ -6,6 +6,8 @@ class WorkTypes
 {
     public const SEND_SMS = 'send_sms';
 
+    public const SEND_OTP_SMS = 'send_otp_sms';
+
     public const CREDIT_QUERY = 'credit_query';
 
     public const PACKAGE_CAMPAIGN_QUERY = 'package_campaign_query';
@@ -18,6 +20,7 @@ class WorkTypes
     {
         $arr = [
             self::SEND_SMS => __('SMS Gönderimi'),
+            self::SEND_OTP_SMS => __('OTP SMS Gönderimi'),
             self::CREDIT_QUERY => __('Kredi Sorgulama'),
             self::PACKAGE_CAMPAIGN_QUERY => __('Paket Kampanya Sorgulama'),
         ];

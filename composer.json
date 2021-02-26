@@ -18,7 +18,8 @@
         "ext-soap": "*",
         "ext-xmlwriter": "*",
         "ext-curl": "*",
-        "codedredd/laravel-soap": "^v1"
+        "codedredd/laravel-soap": "^v1",
+        "ext-simplexml": "*"
     },
     "minimum-stability": "stable",
     "autoload": {
