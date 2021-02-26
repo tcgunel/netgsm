@@ -15,7 +15,7 @@ geliştirme yapılacaktır.
 - [x] SMS Gönderimi
 - [ ] SMS İptali
 - [ ] SMS Sorgulama
-- [ ] OTP Sorgulama
+- [x] OTP SMS
 - [ ] Flash SMS
 - [ ] Gelen SMS
 - [ ] Gönderici Adı Sorgulama
@@ -34,7 +34,7 @@ geliştirme yapılacaktır.
 
 | PHP    | Laravel | Package |
 |--------|---------|---------|
-| ^7.2.5 | 8.x     | v2.0.0  |
+| ^7.3   | 8.x     | v2.0.0  |
 
 ## Kurulum
 
