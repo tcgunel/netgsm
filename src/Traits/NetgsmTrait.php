@@ -3,6 +3,7 @@
 namespace TCGunel\Netgsm\Traits;
 
 use CodeDredd\Soap\Facades\Soap;
+use GuzzleHttp\Psr7\Header;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\CreditQuery\CreditQuery;
 use TCGunel\Netgsm\Exceptions\NetgsmException;
@@ -343,25 +344,33 @@ trait NetgsmTrait
      */
     public function executeWithXml(): string
     {
-        $this
-            ->setServiceType(ServiceTypes::XML)
-            ->checkServiceAvailability(ServiceTypes::XML)
-            ->prepare()
-            ->getXml();
+	    $this
+		    ->setServiceType(ServiceTypes::XML)
+		    ->checkServiceAvailability(ServiceTypes::XML)
+		    ->prepare()
+		    ->getXml();
 
-        $response = $this->getRequestClient()::withHeaders([
-            "Content-Type" => "text/xml;charset=utf-8"
-        ])->send('POST', $this->xml_endpoint, [
-            'body' => $this->values_to_send
-        ]);
+	    $response = $this->getRequestClient()::withHeaders([
+		    "Content-Type" => "text/xml;charset=utf-8"
+	    ])->send('POST', $this->xml_endpoint, [
+		    'body' => $this->values_to_send
+	    ]);
 
-        $response->throw();
+	    $type = $response->getHeader('content-type');
 
-        $this->handleNetgsmErrors($this->work_type, $response->body());
+	    $parsed = Header::parse($type);
 
-        $this->handleNetgsmResponse($this->work_type, $response->body());
+	    $original_body = (string)$response->getBody();
 
-        return $response->body();
+	    $encoded_body = mb_convert_encoding($original_body, 'UTF-8', $parsed[0]['Charset'] ?: 'UTF-8');
+
+	    $response->throw();
+
+	    $this->handleNetgsmErrors($this->work_type, $encoded_body);
+
+	    $this->handleNetgsmResponse($this->work_type, $encoded_body);
+
+	    return $encoded_body;
     }
 
     protected function checkServiceAvailability(string $service_type)
