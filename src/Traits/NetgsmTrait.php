@@ -356,6 +356,8 @@ trait NetgsmTrait
 		    'body' => $this->values_to_send
 	    ]);
 
+        $response->throw();
+
 	    $type = $response->getHeader('content-type');
 
 	    $parsed = Header::parse($type);
@@ -363,8 +365,6 @@ trait NetgsmTrait
 	    $original_body = (string)$response->getBody();
 
 	    $encoded_body = mb_convert_encoding($original_body, 'UTF-8', $parsed[0]['Charset'] ?: 'UTF-8');
-
-	    $response->throw();
 
 	    $this->handleNetgsmErrors($this->work_type, $encoded_body);
 
