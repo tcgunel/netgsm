@@ -358,19 +358,11 @@ trait NetgsmTrait
 
         $response->throw();
 
-	    $type = $response->getHeader('content-type');
+	    $this->handleNetgsmErrors($this->work_type, $response);
 
-	    $parsed = Header::parse($type);
+	    $this->handleNetgsmResponse($this->work_type, $response);
 
-	    $original_body = (string)$response->getBody();
-
-	    $encoded_body = mb_convert_encoding($original_body, 'UTF-8', isset($parsed[0]) && $parsed[0]['Charset'] ?: 'UTF-8');
-
-	    $this->handleNetgsmErrors($this->work_type, $encoded_body);
-
-	    $this->handleNetgsmResponse($this->work_type, $encoded_body);
-
-	    return $encoded_body;
+	    return $response;
     }
 
     protected function checkServiceAvailability(string $service_type)
