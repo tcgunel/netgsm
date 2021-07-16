@@ -364,7 +364,7 @@ trait NetgsmTrait
 
 	    $original_body = (string)$response->getBody();
 
-	    $encoded_body = mb_convert_encoding($original_body, 'UTF-8', $parsed[0]['Charset'] ?: 'UTF-8');
+	    $encoded_body = mb_convert_encoding($original_body, 'UTF-8', isset($parsed[0]) && $parsed[0]['Charset'] ?: 'UTF-8');
 
 	    $this->handleNetgsmErrors($this->work_type, $encoded_body);
 
