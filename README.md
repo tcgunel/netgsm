@@ -1,7 +1,6 @@
 [![License](https://poser.pugx.org/tcgunel/netgsm/license)](https://packagist.org/packages/tcgunel/netgsm)
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/tcgunel/netgsm)
-[![PHP Composer](https://github.com/tcgunel/netgsm/actions/workflows/laravel7-tests.yml/badge.svg)](https://github.com/tcgunel/netgsm/actions/workflows/laravel7-tests.yml)
-[![PHP Composer](https://github.com/tcgunel/netgsm/actions/workflows/laravel8-tests.yml/badge.svg)](https://github.com/tcgunel/netgsm/actions/workflows/laravel8-tests.yml)
+[![PHP Composer](https://github.com/tcgunel/netgsm/actions/workflows/tests.yml/badge.svg)](https://github.com/tcgunel/netgsm/actions/workflows/tests.yml)
 
 # Laravel Netgsm Channel Entegrasyonu (Laravel 7.x|8.x)
 Netgsm hizmetlerini laravel ile kolay ve hızlıca kullanmaya başlamak için geliştirilen bir paket. Netgsm
@@ -30,7 +29,7 @@ geliştirme yapılacaktır.
 ## Requirements
 | PHP       | Laravel | Package |
 |-----------|---------|---------|
-| ^7.4-^8.0 | ^7-^8   | v1.0.0  |
+| ^7.4-^8.0 | ^7-^8   | v1      |
 
 ## Kurulum
 
