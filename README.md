@@ -28,13 +28,9 @@ geliştirme yapılacaktır.
 - [x] Paket Kampanya Sorgulama
 
 ## Requirements
-| PHP    | Laravel | Package |
-|--------|---------|---------|
-| ^7.2.5 | 7.x     | v1.0.0  |
-
-| PHP    | Laravel | Package |
-|--------|---------|---------|
-| ^7.3   | 8.x     | v2.0.0  |
+| PHP       | Laravel | Package |
+|-----------|---------|---------|
+| ^7.4-^8.0 | ^7-^8   | v1.0.0  |
 
 ## Kurulum
 
