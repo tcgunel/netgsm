@@ -10,16 +10,17 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^7.4|^8.0",
         "guzzlehttp/guzzle": "*",
-        "illuminate/notifications": "^v7",
-        "illuminate/database": "^v7",
-        "illuminate/support": "^v7",
+        "illuminate/notifications": "*",
+        "illuminate/database": "*",
+        "illuminate/support": "*",
         "ext-soap": "*",
         "ext-xmlwriter": "*",
         "ext-curl": "*",
-        "codedredd/laravel-soap": "^v1",
-        "ext-simplexml": "*"
+        "codedredd/laravel-soap": "*",
+        "ext-simplexml": "*",
+        "laravel/legacy-factories": "*"
     },
     "minimum-stability": "stable",
     "autoload": {
