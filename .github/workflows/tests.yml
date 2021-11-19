@@ -1,4 +1,4 @@
-name: laravel-7-tests
+name: tests
 
 on:
   push:
