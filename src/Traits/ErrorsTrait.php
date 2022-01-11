@@ -25,6 +25,8 @@ trait ErrorsTrait
 		70 => "Hatalı sorgulama. Gönderdiğiniz parametrelerden birisi hatalı veya zorunlu alanlardan
                 birinin eksik olduğunu ifade eder.",
 
+		62 => "Bakiye hatası.",
+
 		80 => "Gönderim sınır aşımı.",
 
 		100 => "Sistem hatası",
@@ -86,6 +88,7 @@ trait ErrorsTrait
 		52 => "Gönderilen numarayı kontrol ediniz.",
 
 		60 => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
+        62 => "Bakiye hatası.",
 		63 => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
 		64 => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
 		69 => "Hesabınızda OTP SMS Paketi tanımlı değildir, kontrol ediniz.",
