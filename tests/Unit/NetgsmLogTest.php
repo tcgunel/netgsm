@@ -71,7 +71,7 @@ class NetgsmLogTest extends TestCase
 
             $this->assertContains($netgsm_log->work_type, $data['work_types']);
             $this->assertContains($netgsm_log->response_code, $data['response_codes']);
-            $this->assertContains($netgsm_log->response_type, $data['response_types']);
+            $this->assertContains((string)$netgsm_log->response_type, $data['response_types']);
             $this->assertEquals($netgsm_log->response_message, $data['response_message']);
             $this->assertEquals($netgsm_log->payload, $data['payload']);
 //            $this->assertTrue($netgsm_log->netgsm_loggable()->is($another_model));
