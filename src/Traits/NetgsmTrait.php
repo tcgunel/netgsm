@@ -352,7 +352,7 @@ trait NetgsmTrait
 
 	    $response = $this->getRequestClient()::withHeaders([
 		    "Content-Type" => "text/xml;charset=utf-8"
-	    ])->send('POST', $this->xml_endpoint, [
+	    ])->withoutVerifying()->send('POST', $this->xml_endpoint, [
 		    'body' => $this->values_to_send
 	    ]);
 
