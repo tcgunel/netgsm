@@ -33,10 +33,6 @@ class Params extends FormatParams
                 'password' => 'Şifre',
             ])
             ->setMap([
-                'soap' => [
-                    'username'  => 'username',
-                    'password'  => 'password',
-                ],
                 'http' => [
                     'username'  => 'usercode',
                     'password'  => 'password',

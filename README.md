@@ -4,7 +4,7 @@
 
 # Laravel Netgsm Channel Entegrasyonu (Laravel 7.x|8.x|9.x|10.x)
 Netgsm hizmetlerini laravel ile kolay ve hızlıca kullanmaya başlamak için geliştirilen bir paket. Netgsm
-tarafından sunulan tüm metodları (SOAP Servisi, XML POST ve HTTP GET) destekleyecek şekilde hazırlanmıştır.
+tarafından sunulan tüm metodları (XML POST ve HTTP GET) destekleyecek şekilde hazırlanmıştır.
 
 Şimdilik sadece SMS hizmetleri için geliştirme yapılıyor diğer hizmetler için de gerekli oldukça 
 geliştirme yapılacaktır.
@@ -51,7 +51,7 @@ Aşağıdaki ayarlar yapılabilmektedir;
 
 * (bool) log => Loglama işlemini aktif et, api ile yapılan her işlemi kayıt altına alır. 
   
-* (string) service => Xml, soap veya http. 
+* (string) service => Xml veya http. 
 
 * (bool) encoding => Türkçe desteği açıp kapat. Gönderilen SMS'lerdeki karakter hesabı bu ayara göre değişebilir. [Referans](https://www.netgsm.com.tr/dokuman/#soap-servisi-sms-g%C3%B6nderme)
 

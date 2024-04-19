@@ -67,7 +67,7 @@ class FormatParams
 
                 if (is_array($msg)) {
 
-                    throw new NetgsmSendSmsException('N:N Sms gönderimleriniz için soap veya xml servislerini kullanmalısınız.');
+                    throw new NetgsmSendSmsException('N:N Sms gönderimleriniz için xml servisini kullanmalısınız.');
 
                 }
 

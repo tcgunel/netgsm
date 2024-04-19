@@ -100,18 +100,6 @@ class Params extends FormatParams
                 'gsm'      => 'Gönderilecek telefon numarası',
             ])
             ->setMap([
-                'soap' => [
-                    'username'  => 'username',
-                    'password'  => 'password',
-                    'header'    => 'header',
-                    'msg'       => 'msg',
-                    'gsm'       => 'gsm',
-                    'encoding'  => 'encoding',
-                    'startdate' => 'startdate',
-                    'stopdate'  => 'stopdate',
-                    'filter'    => 'filter',
-                    'bayikodu'  => 'bayikodu',
-                ],
                 'http' => [
                     'username'  => 'usercode',
                     'password'  => 'password',

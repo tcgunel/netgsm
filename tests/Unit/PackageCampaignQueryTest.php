@@ -2,7 +2,6 @@
 
 namespace TCGunel\Netgsm\Tests\Unit;
 
-use CodeDredd\Soap\Facades\Soap;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\Exceptions\NetgsmRequiredFieldsException;
@@ -18,8 +17,6 @@ class PackageCampaignQueryTest extends TestCase
     public $username;
 
     public $password;
-
-    public $soap_function_name = 'paketkampanya';
 
     public function setUp(): void
     {
@@ -149,55 +146,6 @@ class PackageCampaignQueryTest extends TestCase
         $creditQuery = new PackageCampaignQuery($http_client);
 
         $creditQuery->executeWithXml();
-    }
-
-    function test_can_execute_with_soap()
-    {
-        $expected = [
-            ['643.0', 'Adet SMS', 'Sms Hizmeti - Giden', 'Paket'],
-        ];
-
-        $client = Soap::fake([
-            $this->soap_function_name => Soap::response(['return' => "643.0|Adet SMS|Sms Hizmeti - Giden|Paket<br>"], 200, ['Headers']),
-        ]);
-
-        $packageCampaignQuery = new PackageCampaignQuery($client);
-
-        $packageCampaignQuery->setPassword($this->password)->setUsername($this->username);
-
-        $packageCampaignQuery->executeWithSoap();
-
-        $this->assertEquals($expected, $packageCampaignQuery->result);
-    }
-
-    function test_can_execute_with_soap_throws_netgsm_exception()
-    {
-        $this->expectException(NetgsmException::class);
-
-        $netgsm_error_code = $this->faker->randomElement(array_keys(self::getPackageCampaignQueryErrors()));
-
-        $client = Soap::fake([
-            $this->soap_function_name => Soap::response(['return' => $netgsm_error_code], 200, ['Headers']),
-        ]);
-
-        $packageCampaignQuery = new PackageCampaignQuery($client);
-
-        $packageCampaignQuery->setPassword($this->password)->setUsername($this->username);
-
-        $packageCampaignQuery->executeWithSoap();
-    }
-
-    function test_can_execute_with_soap_throws_required_fields_exception()
-    {
-        $this->expectException(NetgsmRequiredFieldsException::class);
-
-        $client = Soap::fake([
-            $this->soap_function_name => Soap::response(['return' => null], 422, ['Headers']),
-        ]);
-
-        $creditQuery = new PackageCampaignQuery($client);
-
-        $creditQuery->executeWithSoap();
     }
 
     function test_can_prepare_xml_from_array()

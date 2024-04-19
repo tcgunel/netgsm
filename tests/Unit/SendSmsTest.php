@@ -2,7 +2,6 @@
 
 namespace TCGunel\Netgsm\Tests\Unit;
 
-use CodeDredd\Soap\Facades\Soap;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\Exceptions\NetgsmRequiredFieldsException;
@@ -259,87 +258,6 @@ class SendSmsTest extends TestCase
         $sendSms = new SendSms($http_client);
 
         $sendSms->executeWithXml();
-    }
-
-    function test_can_execute_with_soap_1_message_to_1_receiver()
-    {
-        $client = Soap::fake([
-
-            'smsGonder1NV2' => Soap::response(['return' => $this->successful_return_id], 200, ['Headers']),
-
-        ]);
-
-        $sendSms = new SendSms($client);
-
-        $sendSms->setPassword($this->password)->setUsername($this->username)->setGsm($this->receiver)->setMsg($this->message);
-
-        $sendSms->executeWithSoap();
-
-        $this->assertEquals($this->successful_return_id, $sendSms->result);
-    }
-
-    function test_can_execute_with_soap_1_message_to_n_receiver()
-    {
-        $client = Soap::fake([
-
-            'smsGonder1NV2' => Soap::response(['return' => $this->successful_return_id], 200, ['Headers']),
-
-        ]);
-
-        $sendSms = new SendSms($client);
-
-        $sendSms->setPassword($this->password)->setUsername($this->username)->setGsm($this->receivers)->setMsg($this->message);
-
-        $sendSms->executeWithSoap();
-
-        $this->assertEquals($this->successful_return_id, $sendSms->result);
-    }
-
-    function test_can_execute_with_soap_n_message_to_n_receiver()
-    {
-        $client = Soap::fake([
-
-            'smsGonderNNV2' => Soap::response(['return' => $this->successful_return_id], 200, ['Headers']),
-
-        ]);
-
-        $sendSms = new SendSms($client);
-
-        $sendSms->setPassword($this->password)->setUsername($this->username)->setGsm($this->receivers)->setMsg($this->messages);
-
-        $sendSms->executeWithSoap();
-
-        $this->assertEquals($this->successful_return_id, $sendSms->result);
-    }
-
-    function test_can_execute_with_soap_throws_netgsm_exception()
-    {
-        $this->expectException(NetgsmException::class);
-
-        $netgsm_error_code = $this->faker->randomElement(array_keys(self::getSendSmsErrors()));
-
-        $client = Soap::fake([
-            'smsGonderNNV2' => Soap::response(['return' => $netgsm_error_code], 200, ['Headers']),
-        ]);
-
-        $sendSms = new SendSms($client);
-
-        $sendSms->setPassword($this->password)->setUsername($this->username)->setGsm($this->receivers)->setMsg($this->messages);
-
-        $sendSms->executeWithSoap();
-    }
-
-    function test_can_execute_with_soap_throws_required_fields_exception()
-    {
-        $this->expectException(NetgsmRequiredFieldsException::class);
-
-        $client = Soap::fake([
-            'smsGonderNNV2' => Soap::response(['return' => null], 422, ['Headers']),
-        ]);
-
-        $sendSms = new SendSms($client);
-
-        $sendSms->executeWithSoap();
     }
 
     function test_can_prepare_xml_from_array_for_1_message_to_1_receiver()

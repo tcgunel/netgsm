@@ -2,7 +2,6 @@
 
 namespace TCGunel\Netgsm\Traits;
 
-use CodeDredd\Soap\Facades\Soap;
 use GuzzleHttp\Psr7\Header;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\CreditQuery\CreditQuery;
@@ -20,7 +19,7 @@ trait NetgsmTrait
 
     /**
      * Properly named keys & values to send API.
-     * Array with http and soap,
+     * Array with http.
      * Gets converted to string with XML type request.
      *
      * @var array|string
@@ -31,11 +30,7 @@ trait NetgsmTrait
 
     protected $http_endpoint;
 
-    protected $soap_endpoint;
-
     protected $xml_endpoint;
-
-    protected $soap_function;
 
     protected $request_client;
 
@@ -44,7 +39,7 @@ trait NetgsmTrait
     public $result;
 
     /**
-     * @return Soap|Http
+     * @return Http
      */
     public function getRequestClient()
     {
@@ -52,7 +47,7 @@ trait NetgsmTrait
     }
 
     /**
-     * @param null|Soap|Http $request_client
+     * @param null|Http $request_client
      * @param null|string $service_type
      * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
@@ -62,18 +57,7 @@ trait NetgsmTrait
 
         if (is_null($this->request_client)) {
 
-            switch ($service_type) {
-                case ServiceTypes::SOAP:
-
-                    $this->request_client = Soap::class;
-
-                    break;
-                default:
-
-                    $this->request_client = Http::class;
-
-                    break;
-            }
+            $this->request_client = Http::class;
 
         }
 
@@ -105,34 +89,12 @@ trait NetgsmTrait
     }
 
     /**
-     * @param string $soap_endpoint
-     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
-     */
-    protected function setSoapEndpoint(string $soap_endpoint)
-    {
-        $this->soap_endpoint = $soap_endpoint;
-
-        return $this;
-    }
-
-    /**
      * @param string $xml_endpoint
      * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
      */
     protected function setXmlEndpoint(string $xml_endpoint)
     {
         $this->xml_endpoint = $xml_endpoint;
-
-        return $this;
-    }
-
-    /**
-     * @param string $soap_function
-     * @return SendSms|CreditQuery|PackageCampaignQuery|NetgsmTrait
-     */
-    protected function setSoapFunction(string $soap_function)
-    {
-        $this->soap_function = $soap_function;
 
         return $this;
     }
@@ -282,10 +244,6 @@ trait NetgsmTrait
 
                 return $this->executeWithHttp();
 
-            case ServiceTypes::SOAP:
-
-                return $this->executeWithSoap();
-
             default:
 
                 return $this->executeWithXml();
@@ -313,29 +271,6 @@ trait NetgsmTrait
         $this->handleNetgsmResponse($this->work_type, $response->body());
 
         return $response->body();
-    }
-
-    /**
-     * @return string
-     * @throws \CodeDredd\Soap\Exceptions\RequestException|\Exception
-     */
-    public function executeWithSoap(): string
-    {
-        $this
-            ->setServiceType(ServiceTypes::SOAP)
-            ->checkServiceAvailability(ServiceTypes::SOAP)
-            ->prepare();
-
-        $result = $this->request_client::baseWsdl($this->soap_endpoint)
-            ->call($this->soap_function, $this->values_to_send)
-            ->throw()
-            ->json();
-
-        $this->handleNetgsmErrors($this->work_type, $result['return']);
-
-        $this->handleNetgsmResponse($this->work_type, $result['return']);
-
-        return $result['return'];
     }
 
     /**

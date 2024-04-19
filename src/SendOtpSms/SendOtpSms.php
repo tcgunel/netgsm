@@ -2,7 +2,6 @@
 
 namespace TCGunel\Netgsm\SendOtpSms;
 
-use CodeDredd\Soap\Facades\Soap;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\ServiceTypes;
 use TCGunel\Netgsm\Traits\NetgsmTrait;
@@ -22,8 +21,7 @@ class SendOtpSms extends Params
      *
      * Get option set in config file, fallback to xml.
      * XML is better among others.
-     * http doesn't support n:n,
-     * soap may be problematic.
+     * http doesn't support n:n.
      *
      * @param null|Http $request_client
      */

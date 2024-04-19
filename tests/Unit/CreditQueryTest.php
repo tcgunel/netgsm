@@ -2,7 +2,6 @@
 
 namespace TCGunel\Netgsm\Tests\Unit;
 
-use CodeDredd\Soap\Facades\Soap;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use TCGunel\Netgsm\CreditQuery\CreditQuery;
@@ -19,8 +18,6 @@ class CreditQueryTest extends TestCase
     public $username;
 
     public $password;
-
-    public $soap_function_name = 'kredi';
 
     public function setUp(): void
     {
@@ -145,51 +142,6 @@ class CreditQueryTest extends TestCase
         $creditQuery = new CreditQuery($http_client);
 
         $creditQuery->executeWithXml();
-    }
-
-    function test_can_execute_with_soap()
-    {
-        $client = Soap::fake([
-            $this->soap_function_name => Soap::response(['return' => '0,750'], 200, ['Headers']),
-        ]);
-
-        $creditQuery = new CreditQuery($client);
-
-        $creditQuery->setPassword($this->password)->setUsername($this->username);
-
-        $creditQuery->executeWithSoap();
-
-        $this->assertEquals('0,750', $creditQuery->result);
-    }
-
-    function test_can_execute_with_soap_throws_netgsm_exception()
-    {
-        $this->expectException(NetgsmException::class);
-
-        $netgsm_error_code = $this->faker->randomElement(array_keys(self::getCreditQueryErrors()));
-
-        $client = Soap::fake([
-            $this->soap_function_name => Soap::response(['return' => $netgsm_error_code], 200, ['Headers']),
-        ]);
-
-        $creditQuery = new CreditQuery($client);
-
-        $creditQuery->setPassword($this->password)->setUsername($this->username);
-
-        $creditQuery->executeWithSoap();
-    }
-
-    function test_can_execute_with_soap_throws_required_fields_exception()
-    {
-        $this->expectException(NetgsmRequiredFieldsException::class);
-
-        $client = Soap::fake([
-            $this->soap_function_name => Soap::response(['return' => null], 422, ['Headers']),
-        ]);
-
-        $creditQuery = new CreditQuery($client);
-
-        $creditQuery->executeWithSoap();
     }
 
     function test_can_prepare_xml_from_array()

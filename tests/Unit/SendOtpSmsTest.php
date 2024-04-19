@@ -180,19 +180,4 @@ class SendOtpSmsTest extends TestCase
 
         $sendOtpSms->executeWithXml();
     }
-
-    function test_can_execute_with_soap_throws_exception()
-    {
-        $this->expectException(NetgsmServiceNotAvailableException::class);
-
-        $http_client = Http::fake(function ($request) {
-
-            return Http::response();
-
-        });
-
-        $sendOtpSms = new SendOtpSms($http_client);
-
-        $sendOtpSms->executeWithSoap();
-    }
 }

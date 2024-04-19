@@ -69,20 +69,7 @@ trait SuccessfulResponseTrait
 
     protected function credit_query(string $response)
     {
-        switch ($this->service_type) {
-            case ServiceTypes::HTTP:
-            case ServiceTypes::XML:
-
-                [$this->result_code, $this->result] = explode(' ', $response);
-
-                break;
-
-            case ServiceTypes::SOAP:
-
-                $this->result = $response;
-
-                break;
-        }
+        [$this->result_code, $this->result] = explode(' ', $response);
 
         NetgsmLogger::$response_code = $this->result_code;
 
