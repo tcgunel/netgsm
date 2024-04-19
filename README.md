@@ -2,7 +2,7 @@
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/tcgunel/netgsm)
 [![PHP Composer](https://github.com/tcgunel/netgsm/actions/workflows/tests.yml/badge.svg)](https://github.com/tcgunel/netgsm/actions/workflows/tests.yml)
 
-# Laravel Netgsm Channel Entegrasyonu (Laravel 7.x|8.x|9.x)
+# Laravel Netgsm Channel Entegrasyonu (Laravel 7.x|8.x|9.x|10.x)
 Netgsm hizmetlerini laravel ile kolay ve hızlıca kullanmaya başlamak için geliştirilen bir paket. Netgsm
 tarafından sunulan tüm metodları (SOAP Servisi, XML POST ve HTTP GET) destekleyecek şekilde hazırlanmıştır.
 
@@ -27,9 +27,10 @@ geliştirme yapılacaktır.
 - [x] Paket Kampanya Sorgulama
 
 ## Requirements
-| PHP       | Laravel  | Package |
-|-----------|----------|---------|
-| ^7.4-^8.0 | ^7-^8-^9 | v1      |
+| PHP       | Laravel   | Package |
+|-----------|-----------|---------|
+| ^7.4-^8.0 | ^7-^8-^9  | v1      |
+| ^8.0      | ^8-^9-^10 | v3      |
 
 ## Kurulum
 
