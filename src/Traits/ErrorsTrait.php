@@ -185,6 +185,12 @@ trait ErrorsTrait
 
 				}
 			}
+
+			preg_match('/<return>(\d+)<\/return>/', $response, $matched);
+
+			if (isset($matched[0]) && is_numeric($matched[0])){
+				return $matched[0];
+			}
 		}
 
 		return $response;
