@@ -22,6 +22,10 @@ trait ErrorsTrait
 		40 => "Mesaj başlığınızın (gönderici adınızın) sistemde tanımlı olmadığını
                 ifade eder. Gönderici adlarınızı API ile sorgulayarak kontrol edebilirsiniz.",
 
+		50 => "Abone hesabınız ile İYS kontrollü gönderimler yapılamamaktadır.",
+
+		51 => "Aboneliğinize tanımlı İYS Marka bilgisi bulunamadığını ifade eder.",
+
 		70 => "Hatalı sorgulama. Gönderdiğiniz parametrelerden birisi hatalı veya zorunlu alanlardan
                 birinin eksik olduğunu ifade eder.",
 
